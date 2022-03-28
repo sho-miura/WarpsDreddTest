@@ -1,0 +1,1160 @@
+openapi: 3.0.3
+info:
+  description: "WARPs APIに関するリファレンスです。検討段階でのものとなります。"
+  version: "0.0.1"
+  title: "ログインユーザーの正常系テスト(login_user.yml)"
+servers:
+- url: "https://dev-warps.pasch.fan"
+paths:
+  /api/other/health:
+    get:
+      summary: "APIのヘルスチェック用に使用します。"
+      responses:
+        "200":
+          description: "ヘルスチェック情報"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+
+
+  /api/auth/login:
+    post:
+      summary: "ログインAPI(メールアドレス)"
+      description: "メールアドレス、パスワードから認証トークンを返却します"
+      requestBody:
+        description: "メールアドレス、パスワードを入力します"
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  example: example@gmail.com
+                password:
+                  type: string
+                  example: password
+      responses:
+        "200":
+          description: "ユーザー情報"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+                    example: OEG9DiFYBuPKq2gPIMhFabajEesbXtImspIYTqyc09iCRVW1zcs0KkAzWswE
+
+  /api/home/init:
+    post:
+      summary: "規約・プライバシーポリシーのURLを返却。"
+      description: "規約・プライバシーポリシーのURLを返却。言語コード毎に返すURLが違う。<br />
+                    <b>認証トークン有りで呼び出されるとログインボーナスの付与を行う(1日1回のみ)</b><br />
+                    ※ 保有ポイント自体は、別APIにて取得してください"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                country_code:
+                  type: string
+                  example: ja
+      responses:
+        "200":
+          description: "アプリ情報"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  member_terms_url:
+                    type: string
+                    example: "https://avex.com/jp/ja/public/privacy/"
+                  pasch_terms_url:
+                    type: string
+                    example: "https://local-monsta-x.pasch.fan/legal"
+                  privacy_url:
+                    type: string
+                    example: "https://local-monsta-x.pasch.fan/help"
+                  help_url:
+                    type: string
+                    example: "https://local-monsta-x.pasch.fan/help"
+
+  /api/account/me:
+    post:
+      summary: "マイアカウント情報取得"
+      description: "自身のWARPsユーザー情報、PASCHアカウント情報、会員証情報、ファンクラブプロフィール情報の取得"
+      responses:
+        "200":
+          description: "ユーザー情報"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        example: 1
+                      pasch_id:
+                        type: integer
+                        example: 501
+                      name:
+                        type: string
+                        example: "ゆみこ"
+                      email:
+                        type: string
+                        example: test@test.jp
+                      country_code:
+                        type: string
+                        example: JPN
+                      user_type:
+                        type: integer
+                        example: 1
+                      bio:
+                        type: string
+                        example: "ホゲホゲほげほげ"
+                      last_login_at:
+                        type: string
+                        example: "2016-08-11T11:40:55.063Z"
+                      created_this_app:
+                        type: boolean
+                        example: false
+                      deleted_at:
+                        type: string
+                        example: ""
+                  pasch_user:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        example: 1
+                      nickname:
+                        type: string
+                        example: "ゆみこ"
+                      country_code:
+                        type: string
+                        example: ja
+                      profile_image_url:
+                        type: string
+                        example: "https://amazon.s3.chatta.jp/XXX/XXX.png"
+                      prefecture_code:
+                        type: integer
+                        example: 5
+                      gender:
+                        type: integer
+                        example: 1
+                      birth_on:
+                        type: string
+                        example: "2001-01-15T00:00:00+09:00"
+                      login_failed_count:
+                        type: integer
+                        example: 0
+                      last_login_at:
+                        type: string
+                        example: "2016-08-11T11:40:55.063Z"
+                      created_at:
+                        type: string
+                        example: "2016-08-11T11:40:55.063Z"
+                      updated_at:
+                        type: string
+                        example: "2016-08-11T11:40:55.063Z"
+                      has_email:
+                        type: boolean
+                        example: true
+                      has_password:
+                        type: boolean
+                        example: true
+                      apple_user:
+                        type: object
+                        properties:
+                          id:
+                            type: integer
+                            example: 1234
+                          user_id:
+                            type: integer
+                            example: 1234
+                          sub:
+                            type: string
+                            example: hogehoge
+                          email:
+                            type: string
+                            example: sample@example.com
+                          access_token:
+                            type: string
+                            example: "OEG9DiFYBuPKq2gPIMhFabajEesbXtImspIYTqyc09iCRVW1zcs0KkAzWswE"
+                          temporary_token:
+                            type: string
+                            example: "OEG9DiFYBuPKq2gPIMhFabajEesbXtImspIYTqyc09iCRVW1zcs0KkAzWswE"
+                          deleted_at:
+                            type: string
+                            example: "2016-08-11T11:40:55.063Z"
+                          created_at:
+                            type: string
+                            example: "2016-08-11T11:40:55.063Z"
+                          updated_at:
+                            type: string
+                            example: "2016-08-11T11:40:55.063Z"
+                      awa_user:
+                        type: object
+                        properties:
+                          id:
+                            type: integer
+                            example: 1234
+                          user_id:
+                            type: integer
+                            example: 1234
+                          awa_user_id:
+                            type: integer
+                            example: 1234
+                          email:
+                            type: string
+                            example: sample@example.com
+                          name:
+                            type: string
+                            example: sample
+                          access_token:
+                            type: string
+                            example: "OEG9DiFYBuPKq2gPIMhFabajEesbXtImspIYTqyc09iCRVW1zcs0KkAzWswE"
+                          expired_at:
+                            type: string
+                            example: "2016-08-11T11:40:55.063Z"
+                          refresh_token:
+                            type: string
+                            example: "OEG9DiFYBuPKq2gPIMhFabajEesbXtImspIYTqyc09iCRVW1zcs0KkAzWswE"
+                          deleted_at:
+                            type: string
+                            example: "2016-08-11T11:40:55.063Z"
+                          created_at:
+                            type: string
+                            example: "2016-08-11T11:40:55.063Z"
+                          updated_at:
+                            type: string
+                            example: "2016-08-11T11:40:55.063Z"
+                      facebook_user:
+                        type: object
+                        properties:
+                          id:
+                            type: integer
+                            example: 1234
+                          user_id:
+                            type: integer
+                            example: 1234
+                          facebook_user_id:
+                            type: string
+                            example: "hogehoge"
+                          email:
+                            type: string
+                            example: sample@example.com
+                          name:
+                            type: string
+                            example: hogehoge
+                          access_token:
+                            type: string
+                            example: "OEG9DiFYBuPKq2gPIMhFabajEesbXtImspIYTqyc09iCRVW1zcs0KkAzWswE"
+                          expired_at:
+                            type: string
+                            example: "2016-08-11T11:40:55.063Z"
+                          temporary_token:
+                            type: string
+                            example: "OEG9DiFYBuPKq2gPIMhFabajEesbXtImspIYTqyc09iCRVW1zcs0KkAzWswE"
+                          deleted_at:
+                            type: string
+                            example: "2016-08-11T11:40:55.063Z"
+                          created_at:
+                            type: string
+                            example: "2016-08-11T11:40:55.063Z"
+                          updated_at:
+                            type: string
+                            example: "2016-08-11T11:40:55.063Z"
+                      google_user:
+                        type: object
+                        properties:
+                          id:
+                            type: integer
+                            example: 1234
+                          user_id:
+                            type: integer
+                            example: 1234
+                          google_user_id:
+                            type: string
+                            example: "hogehoge"
+                          email:
+                            type: string
+                            example: sample@example.com
+                          name:
+                            type: string
+                            example: hogehoge
+                          access_token:
+                            type: string
+                            example: "OEG9DiFYBuPKq2gPIMhFabajEesbXtImspIYTqyc09iCRVW1zcs0KkAzWswE"
+                          temporary_token:
+                            type: string
+                            example: "OEG9DiFYBuPKq2gPIMhFabajEesbXtImspIYTqyc09iCRVW1zcs0KkAzWswE"
+                          refresh_token:
+                            type: string
+                            example: "OEG9DiFYBuPKq2gPIMhFabajEesbXtImspIYTqyc09iCRVW1zcs0KkAzWswE"
+                          expired_in:
+                            type: integer
+                            example: 5183944
+                          deleted_at:
+                            type: string
+                            example: "2016-08-11T11:40:55.063Z"
+                          created_at:
+                            type: string
+                            example: "2016-08-11T11:40:55.063Z"
+                          updated_at:
+                            type: string
+                            example: "2016-08-11T11:40:55.063Z"
+                      twitter_user:
+                        type: object
+                        properties:
+                          id:
+                            type: integer
+                            example: 1234
+                          user_id:
+                            type: integer
+                            example: 1234
+                          twitter_user_id:
+                            type: string
+                            example: "hogehoge"
+                          name:
+                            type: string
+                            example: hogehoge
+                          screen_name:
+                            type: string
+                            example: hogehoge
+                          oauth_token:
+                            type: string
+                            example: "OEG9DiFYBuPKq2gPIMhFabajEesbXtImspIYTqyc09iCRVW1zcs0KkAzWswE"
+                          oauth_token_secret:
+                            type: string
+                            example: "OEG9DiFYBuPKq2gPIMhFabajEesbXtImspIYTqyc09iCRVW1zcs0KkAzWswE"
+                          temporary_token:
+                            type: string
+                            example: "OEG9DiFYBuPKq2gPIMhFabajEesbXtImspIYTqyc09iCRVW1zcs0KkAzWswE"
+                          deleted_at:
+                            type: string
+                            example: "2016-08-11T11:40:55.063Z"
+                          created_at:
+                            type: string
+                            example: "2016-08-11T11:40:55.063Z"
+                          updated_at:
+                            type: string
+                            example: "2016-08-11T11:40:55.063Z"
+                  pasch_point_total:
+                    type: integer
+                    example: 0
+
+
+  /api/account/other:
+    post:
+      summary: "アカウント情報取得"
+      description: "UIDベースでのWARPsアカウント情報の取得。基本、他の人のアカウントを調べる用途。"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: integer
+                  example: 4
+      responses:
+        "200":
+          description: "ユーザー情報"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user:
+                    type: object
+                    properties:
+                      pasch_id:
+                        type: integer
+                        example: 501
+                      name:
+                        type: string
+                        example: "ゆみこ"
+                      email:
+                        type: string
+                        example: test@test.jp
+                      country_code:
+                        type: string
+                        example: JPN
+                      user_type:
+                        type: integer
+                        example: 1
+                      profile_image_url:
+                        type: string
+                        example: "http://example.image"
+                      bio:
+                        type: string
+                        example: "ホゲホゲほげほげ"
+                      last_login_at:
+                        type: string
+                        example: "2016-08-11T11:40:55.063Z"
+                      created_this_app:
+                        type: boolean
+                        example: false
+                      daily_mission_access_at:
+                        type: string
+                      deleted_at:
+                        type: string
+                      created_at:
+                        type: string
+                      updated_at:
+                        type: string
+
+
+  /api/artist/artists:
+    post:
+      summary: "アーティスト一覧取得"
+      description: "アーティスト一覧を取得します。<br />※デフォルトで100件ずつ取得します。"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                artist_type:
+                  type: integer
+                  example: 0
+                country_code:
+                  type: string
+                  example: ja
+                count:
+                  type: integer
+                  example: 30
+                page:
+                  type: integer
+                  example: 1
+      responses:
+        "200":
+          description: "メンバー一覧情報"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  artists:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                          example: 1234
+                        artist_type:
+                          type: integer
+                          example: 1
+                        name:
+                          type: string
+                          example: "メンバー名"
+                        cover_image_url:
+                          type: string
+                          example: https://amazon.s3.chatta.jp/XXX/XXX.png
+                        profile:
+                          type: string
+                          example: 部屋名説明文４５６
+                        follower_count:
+                          type: integer
+                          example: 33333
+                        is_followed:
+                          type: boolean
+                          example: true
+
+
+  /api/artist/follow/new:
+    post:
+      summary: "アーティストフォロー（メンバー、チーム、グループ共通）"
+      description: "アーティストフォローを実施します。"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                artist_type:
+                  type: integer
+                  example: 1
+                artist_id:
+                  type: integer
+                  example: 3
+      responses:
+        "200":
+          description: "アーティストフォロー成功"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+
+  /api/artist/follow/delete:
+    post:
+      summary: "アーティストフォロー解除"
+      description: "アーティストフォロー解除を実施します。"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                artist_type:
+                  type: integer
+                  example: 1
+                artist_id:
+                  type: integer
+                  example: 3
+      responses:
+        "200":
+          description: "アーティストフォローの解除"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+
+
+  /api/community/rooms:
+    post:
+      summary: "部屋一覧取得"
+      description: "コミュニティ機能で対象FCで表示可能なルーム一覧を取得します。<br />※デフォルトで100件ずつ取得します。"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                country_code:
+                  type: string
+                  example: ja
+                count:
+                  type: integer
+                  example: 100
+                page:
+                  type: integer
+                  example: 1
+                favorite_only:
+                  type: integer
+                  example: 0
+      responses:
+        "200":
+          description: "部屋一覧情報"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  rooms:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                          example: 1234
+                        name:
+                          type: string
+                          example: 部屋名１２３
+                        description:
+                          type: string
+                          example: 部屋名説明文４５６
+                        room_image_url:
+                          type: string
+                          example: https://amazon.s3.chatta.jp/XXX/XXX.png
+                        comment_count:
+                          type: integer
+                          example: 1000
+                        public_range:
+                          type: integer
+                          example: 1
+                        created_at:
+                          type: string
+                          example: "2021-01-01T00:00:00.000Z"
+                        updated_at:
+                          type: string
+                          example: "2021-01-01T00:00:00.000Z"
+
+
+  /api/community/comments:
+    post:
+      summary: "ルームのコメント情報取得"
+      description: "ルームのコメント情報一覧の取得"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: integer
+                  example: 2
+                count:
+                  type: integer
+                  example: 100
+                page:
+                  type: integer
+                  example: 1
+                room_comment_images:
+                  type: array
+                  items:
+                    type: string
+                    example: https://chatta-dev.s3-ap-northeast-1.amazonaws.com/xxx/yyy/zzz.png
+      responses:
+        "200":
+          description: "ルームのコメント情報一覧の取得成功"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  room_comments:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                          example: 123
+                        user_name:
+                          type: string
+                          example: "ユーザー名"
+                        user_id:
+                          type: integer
+                          example: 123
+                        artist_name:
+                          type: string
+                          example: "アーティスト名"
+                        artist_id:
+                          type: integer
+                          example: 123
+                        comment:
+                          type: string
+                          example: "モゴモゴもごモゴモゴもごモゴモゴもごモゴモゴもごモゴモゴもご"
+                        default_country_code:
+                          type: integer
+                          example: 1
+                        room_comment_images:
+                          type: array
+                          items:
+                            type: string
+                            example: https://chatta-dev.s3-ap-northeast-1.amazonaws.com/xxx/yyy/zzz.png
+                        created_at:
+                          type: string
+                          example: "2022-01-27T08:13:04.881232Z"
+                        updated_at:
+                          type: string
+                          example: "2022-01-27T08:13:04.881281Z"
+
+
+  /api/community/comment/new:
+    post:
+      summary: "ルームへのコメントの投稿"
+      description: "ルームへのコメントの投稿"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: integer
+                  example: 2
+                comment:
+                  type: string
+                  example: "ルームに対するコメント投稿"
+                country_code:
+                  type: string
+                  example: ja
+      responses:
+        "200":
+          description: "コメント投稿成功"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+
+
+  /api/community/comment/delete:
+    post:
+      summary: "投稿情報の削除"
+      description: "ルームへのコメントの削除<br />※自身のコメントしか削除できません"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: integer
+                  example: 2
+      responses:
+        "200":
+          description: "コメント削除成功"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+
+
+  /api/community/favorite/new:
+    post:
+      summary: "Roomのお気に入り"
+      description: "Roomのお気に入り"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: integer
+                  example: 2
+      responses:
+        "200":
+          description: "Roomのお気に入り成功"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+
+
+  /api/community/favorite/delete:
+    post:
+      summary: "Roomのお気に入り解除"
+      description: "Roomのお気に入り解除"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: integer
+                  example: 2
+      responses:
+        "200":
+          description: "Roomのお気に入り解除"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+
+
+
+  /api/post/list:
+    post:
+      summary: "ポスト・コメント・コメントリプライ情報"
+      description: "ポスト・コメント・コメントリプライ一覧を100件づつ取得<br />ポスト自体が短いので内容含めて全て取得"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                data_type:
+                  type: integer
+                  example: 0
+                post_type:
+                  type: integer
+                  example: 0
+                order:
+                  type: integer
+                  example: 0
+                country_code:
+                  type: string
+                  example: ja
+                count:
+                  type: integer
+                  example: 200
+                page:
+                  type: integer
+                  example: 1
+                follow_only:
+                  type: integer
+                  example: 0
+      responses:
+        "200":
+          description: "ポスト一覧情報"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  posts:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                          example: 1234
+                        post_type:
+                          type: integer
+                          example: 1
+                        artist_id:
+                          type: integer
+                          example: 1
+                        artist_type:
+                          type: integer
+                          example: 1
+                        title:
+                          type: string
+                          example: タイトル
+                        body:
+                          type: string
+                          example: 本文
+                        thumbnail_url:
+                          type: string
+                          example: https://chatta-dev.s3-ap-northeast-1.amazonaws.com/xxx/yyy/zzz.png
+                        post_movie_url:
+                          type: string
+                          example: https://chatta-dev.s3-ap-northeast-1.amazonaws.com/xxx/yyy/zzz.png
+                        comment_count:
+                          type: integer
+                          example: 3231
+                        like_count:
+                          type: integer
+                          example: 3231
+                        hash_tags:
+                          type: string
+                          example: "#ホゲホゲ #TEST"
+                        created_at:
+                          type: string
+                          example: "2022-01-21T05:50:33.722499Z"
+                        updated_at:
+                          type: string
+                          example: "2022-01-21T05:50:33.722578Z"
+                        post_images:
+                          type: array
+                          items:
+                            type: string
+                            example: https://chatta-dev.s3-ap-northeast-1.amazonaws.com/xxx/yyy/zzz.png
+
+
+  /api/post/like/new:
+    post:
+      summary: "ポスト・コメント・コメントリプライでのいいね"
+      description: "ポスト・コメント・コメントリプライでのいいね"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: integer
+                  example: 4
+                data_type:
+                  type: integer
+                  example: 0
+      responses:
+        "200":
+          description: "ポスト・コメント・コメントリプライでのいいね成功"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+
+
+  /api/post/like/delete:
+    post:
+      summary: "ポスト・コメント・コメントリプライでのいいね解除"
+      description: "ポスト・コメント・コメントリプライでのいいね解除"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: integer
+                  example: 4
+                data_type:
+                  type: integer
+                  example: 0
+      responses:
+        "200":
+          description: "ポスト・コメント・コメントリプライでのいいね解除"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+
+
+
+
+  /api/post/comment/new:
+    post:
+      summary: "ポスト・コメントでのコメント・コメントリプライ作成"
+      description: "ポスト・コメントでのコメント・コメントリプライ作成<br />※NGワードでの登録失敗は「422」のエラーコードが返る。"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: integer
+                  example: 4
+                data_type:
+                  type: integer
+                  example: 0
+                comment:
+                  type: string
+                  example: "this is post comment"
+                country_code:
+                  type: string
+                  example: ja
+      responses:
+        "200":
+          description: "ポスト・コメントでのコメント・コメントリプライ作成"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+
+
+  /api/post/comment/delete:
+    post:
+      summary: "ポスト・コメントでのコメント・コメントリプライ削除"
+      description: "ポスト・コメントでのコメント・コメントリプライ削除"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: integer
+                  example: 4
+                data_type:
+                  type: integer
+                  example: 1
+      responses:
+        "200":
+          description: "ポスト・コメントでのコメント・コメントリプライ削除"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+
+
+
+
+  /api/search:
+    post:
+      summary: "ルームや投稿への検索の実施"
+      description: "ルームや投稿への検索の実施"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                word:
+                  type: string
+                  example: "WARPs DIG"
+                country_code:
+                  type: string
+                  example: "ja"
+      responses:
+        "200":
+          description: "ポスト一覧情報"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  posts:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                          example: 1234
+                        post_type:
+                          type: integer
+                          example: 1
+                        artist_id:
+                          type: integer
+                          example: 1
+                        artist_type:
+                          type: integer
+                          example: 1
+                        title:
+                          type: string
+                          example: タイトル
+                        body:
+                          type: string
+                          example: 本文
+                        thumbnail_url:
+                          type: string
+                          example: https://chatta-dev.s3-ap-northeast-1.amazonaws.com/xxx/yyy/zzz.png
+                        post_movie_url:
+                          type: string
+                          example: https://chatta-dev.s3-ap-northeast-1.amazonaws.com/xxx/yyy/zzz.png
+                        comment_count:
+                          type: integer
+                          example: 3231
+                        like_count:
+                          type: integer
+                          example: 3231
+                        hash_tags:
+                          type: string
+                          example: "#ホゲホゲ #TEST"
+                        created_at:
+                          type: string
+                          example: "2022-01-21T05:50:33.722499Z"
+                        updated_at:
+                          type: string
+                          example: "2022-01-21T05:50:33.722578Z"
+                  rooms:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                          example: 1234
+                        name:
+                          type: string
+                          example: "WARPs DIGコミュニティ"
+                        room_image_url:
+                          type: string
+                          example: https://chatta-dev.s3-ap-northeast-1.amazonaws.com/xxx/yyy/zzz.png
+                        comment_count:
+                          type: integer
+                          example: 2000
+                        description:
+                          type: string
+                          example: "モゴモゴもごモゴモゴもごモゴモゴもごモゴモゴもごモゴモゴもご"
+
+
+
+
+  /api/search/popularity:
+    post:
+      summary: "人気検索ワードの取得"
+      description: "人気検索ワードの取得を行う。<br />検索ワードではハッシュタグとしては特に区別していない。"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                country_code:
+                  type: string
+                  example: "ja"
+      responses:
+        "200":
+          description: "人気検索一覧情報"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  search_words:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        rank:
+                          type: integer
+                          example: 1
+                        word:
+                          type: string
+                          example: "#warpsdig"
+
+
+
+  /api/search/histories:
+    post:
+      summary: "検索履歴の確認"
+      description: "検索履歴の確認"
+      responses:
+        "200":
+          description: "検索履歴一覧情報"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  search_histries:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        words:
+                          type: string
+                          example: "WARPs DIG"
+                        created_at:
+                          type: string
+                          example: "2022-01-22T11:29:04.695054Z"
+
+
+  /api/auth/logout:
+    post:
+      summary: "ログアウトAPI(メールアドレス)"
+      description: "APIトークンを無効化します。"
+      responses:
+        "200":
+          description: "ユーザー情報"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true

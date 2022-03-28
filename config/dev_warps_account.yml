@@ -1,0 +1,386 @@
+openapi: 3.0.3
+info:
+  version: "0.0.1"
+  title: "アカウント登録の正常系テスト(account.yml)"
+servers:
+- url: "https://dev-warps.pasch.fan"
+paths:
+  /api/other/health:
+    get:
+      summary: "APIのヘルスチェック"
+      responses:
+        "200":
+          description: "ヘルスチェック情報"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+
+  /api/auth/mail:
+    post:
+      summary: "仮登録・認証コード発行"
+      description: "PASCHアカウントの仮登録及び認証コードの発行"
+      requestBody:
+        description: "メールアドレス、パスワードを入力します"
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  example: miuras+warpstest028@colabmix.co.jp
+                password:
+                  type: string
+                  example: passwD1234
+      responses:
+        "200":
+          description: "仮登録・認証コード発行完了"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+
+  /api/auth/mail/verify:
+    post:
+      summary: "認証コード確認"
+      description: "PASCHアカウント作成(認証コードの確認)"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  example: miuras+warpstest020@gmail.com
+                certCode:
+                  type: integer
+                  example: 123456
+      responses:
+        "200":
+          description: "認証コード確認完了"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+
+  /api/auth/mail/register:
+    post:
+      summary: "本登録(メールアドレス)"
+      description: "PASCHアカウントの本登録"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  example: example@gmail.com
+                nickname:
+                  type: string
+                  example: パラライ
+                birth_on:
+                  type: string
+                  example: "2002-01-01"
+                gender:
+                  type: integer
+                  example: 1
+                country_code:
+                  type: string
+                  example: JPN
+                prefecture_code:
+                  type: integer
+                  example: 1
+      responses:
+        "200":
+          description: "本登録完了"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+                    example: OEG9DiFYBuPKq2gPIMhFabajEesbXtImspIYTqyc09iCRVW1zcs0KkAzWswE
+
+  /api/account/me:
+    post:
+      summary: "マイアカウント情報取得"
+      description: "自身のWARPsユーザー情報、PASCHアカウント情報、会員証情報、ファンクラブプロフィール情報の取得"
+      responses:
+        "200":
+          description: "ユーザー情報"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        example: 1
+                      pasch_id:
+                        type: integer
+                        example: 501
+                      name:
+                        type: string
+                        example: "ゆみこ"
+                      email:
+                        type: string
+                        example: test@test.jp
+                      country_code:
+                        type: string
+                        example: ja
+                      user_type:
+                        type: integer
+                        example: 1
+                      bio:
+                        type: string
+                        example: "ホゲホゲほげほげ"
+                      last_login_at:
+                        type: string
+                        example: "2016-08-11T11:40:55.063Z"
+                      created_this_app:
+                        type: boolean
+                        example: false
+                      deleted_at:
+                        type: string
+                        example: ""
+                  pasch_user:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        example: 1
+                      nickname:
+                        type: string
+                        example: "ゆみこ"
+                      country_code:
+                        type: string
+                        example: ja
+                      profile_image_url:
+                        type: string
+                        example: "https://amazon.s3.chatta.jp/XXX/XXX.png"
+                      prefecture_code:
+                        type: integer
+                        example: 5
+                      gender:
+                        type: integer
+                        example: 1
+                      birth_on:
+                        type: string
+                        example: "2001-01-15T00:00:00+09:00"
+                      login_failed_count:
+                        type: integer
+                        example: 0
+                      last_login_at:
+                        type: string
+                        example: "2016-08-11T11:40:55.063Z"
+                      created_at:
+                        type: string
+                        example: "2016-08-11T11:40:55.063Z"
+                      updated_at:
+                        type: string
+                        example: "2016-08-11T11:40:55.063Z"
+                      has_email:
+                        type: boolean
+                        example: true
+                      has_password:
+                        type: boolean
+                        example: true
+                      apple_user:
+                        type: object
+                        properties:
+                          id:
+                            type: integer
+                            example: 1234
+                          user_id:
+                            type: integer
+                            example: 1234
+                          sub:
+                            type: string
+                            example: hogehoge
+                          email:
+                            type: string
+                            example: sample@example.com
+                          access_token:
+                            type: string
+                            example: "OEG9DiFYBuPKq2gPIMhFabajEesbXtImspIYTqyc09iCRVW1zcs0KkAzWswE"
+                          temporary_token:
+                            type: string
+                            example: "OEG9DiFYBuPKq2gPIMhFabajEesbXtImspIYTqyc09iCRVW1zcs0KkAzWswE"
+                          deleted_at:
+                            type: string
+                            example: "2016-08-11T11:40:55.063Z"
+                          created_at:
+                            type: string
+                            example: "2016-08-11T11:40:55.063Z"
+                          updated_at:
+                            type: string
+                            example: "2016-08-11T11:40:55.063Z"
+                      awa_user:
+                        type: object
+                        properties:
+                          id:
+                            type: integer
+                            example: 1234
+                          user_id:
+                            type: integer
+                            example: 1234
+                          awa_user_id:
+                            type: integer
+                            example: 1234
+                          email:
+                            type: string
+                            example: sample@example.com
+                          name:
+                            type: string
+                            example: sample
+                          access_token:
+                            type: string
+                            example: "OEG9DiFYBuPKq2gPIMhFabajEesbXtImspIYTqyc09iCRVW1zcs0KkAzWswE"
+                          expired_at:
+                            type: string
+                            example: "2016-08-11T11:40:55.063Z"
+                          refresh_token:
+                            type: string
+                            example: "OEG9DiFYBuPKq2gPIMhFabajEesbXtImspIYTqyc09iCRVW1zcs0KkAzWswE"
+                          deleted_at:
+                            type: string
+                            example: "2016-08-11T11:40:55.063Z"
+                          created_at:
+                            type: string
+                            example: "2016-08-11T11:40:55.063Z"
+                          updated_at:
+                            type: string
+                            example: "2016-08-11T11:40:55.063Z"
+                      facebook_user:
+                        type: object
+                        properties:
+                          id:
+                            type: integer
+                            example: 1234
+                          user_id:
+                            type: integer
+                            example: 1234
+                          facebook_user_id:
+                            type: string
+                            example: "hogehoge"
+                          email:
+                            type: string
+                            example: sample@example.com
+                          name:
+                            type: string
+                            example: hogehoge
+                          access_token:
+                            type: string
+                            example: "OEG9DiFYBuPKq2gPIMhFabajEesbXtImspIYTqyc09iCRVW1zcs0KkAzWswE"
+                          expired_at:
+                            type: string
+                            example: "2016-08-11T11:40:55.063Z"
+                          temporary_token:
+                            type: string
+                            example: "OEG9DiFYBuPKq2gPIMhFabajEesbXtImspIYTqyc09iCRVW1zcs0KkAzWswE"
+                          deleted_at:
+                            type: string
+                            example: "2016-08-11T11:40:55.063Z"
+                          created_at:
+                            type: string
+                            example: "2016-08-11T11:40:55.063Z"
+                          updated_at:
+                            type: string
+                            example: "2016-08-11T11:40:55.063Z"
+                      google_user:
+                        type: object
+                        properties:
+                          id:
+                            type: integer
+                            example: 1234
+                          user_id:
+                            type: integer
+                            example: 1234
+                          google_user_id:
+                            type: string
+                            example: "hogehoge"
+                          email:
+                            type: string
+                            example: sample@example.com
+                          name:
+                            type: string
+                            example: hogehoge
+                          access_token:
+                            type: string
+                            example: "OEG9DiFYBuPKq2gPIMhFabajEesbXtImspIYTqyc09iCRVW1zcs0KkAzWswE"
+                          temporary_token:
+                            type: string
+                            example: "OEG9DiFYBuPKq2gPIMhFabajEesbXtImspIYTqyc09iCRVW1zcs0KkAzWswE"
+                          refresh_token:
+                            type: string
+                            example: "OEG9DiFYBuPKq2gPIMhFabajEesbXtImspIYTqyc09iCRVW1zcs0KkAzWswE"
+                          expired_in:
+                            type: integer
+                            example: 5183944
+                          deleted_at:
+                            type: string
+                            example: "2016-08-11T11:40:55.063Z"
+                          created_at:
+                            type: string
+                            example: "2016-08-11T11:40:55.063Z"
+                          updated_at:
+                            type: string
+                            example: "2016-08-11T11:40:55.063Z"
+                      twitter_user:
+                        type: object
+                        properties:
+                          id:
+                            type: integer
+                            example: 1234
+                          user_id:
+                            type: integer
+                            example: 1234
+                          twitter_user_id:
+                            type: string
+                            example: "hogehoge"
+                          name:
+                            type: string
+                            example: hogehoge
+                          screen_name:
+                            type: string
+                            example: hogehoge
+                          oauth_token:
+                            type: string
+                            example: "OEG9DiFYBuPKq2gPIMhFabajEesbXtImspIYTqyc09iCRVW1zcs0KkAzWswE"
+                          oauth_token_secret:
+                            type: string
+                            example: "OEG9DiFYBuPKq2gPIMhFabajEesbXtImspIYTqyc09iCRVW1zcs0KkAzWswE"
+                          temporary_token:
+                            type: string
+                            example: "OEG9DiFYBuPKq2gPIMhFabajEesbXtImspIYTqyc09iCRVW1zcs0KkAzWswE"
+                          deleted_at:
+                            type: string
+                            example: "2016-08-11T11:40:55.063Z"
+                          created_at:
+                            type: string
+                            example: "2016-08-11T11:40:55.063Z"
+                          updated_at:
+                            type: string
+                            example: "2016-08-11T11:40:55.063Z"
+                  pasch_point_total:
+                    type: integer
+                    example: 0

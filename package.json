@@ -1,0 +1,21 @@
+{
+  "name": "sampledredd",
+  "version": "1.0.0",
+  "description": "",
+  "main": "hooks.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": ""
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.25.0",
+    "chai": "^4.3.6",
+    "diff": "^5.0.0",
+    "dredd-transactions": "^10.1.0"
+  },
+  "devDependencies": {
+    "json-schema-generator": "^2.0.6"
+  }
+}

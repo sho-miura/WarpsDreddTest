@@ -1,0 +1,288 @@
+openapi: 3.0.3
+info:
+  version: "0.0.1"
+  title: "ゲストユーザーの正常系テスト(guest_user.yml)"
+servers:
+- url: "https://dev-warps.pasch.fan"
+paths:
+  /api/other/health:
+    get:
+      summary: "APIのヘルスチェック"
+      responses:
+        "200":
+          description: "ヘルスチェック情報"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+
+  /api/home/init:
+    post:
+      summary: "規約・プライバシーポリシーのURLを返却。"
+      description: "規約・プライバシーポリシーのURLを返却。言語コード毎に返すURLが違う。<br />
+                    <b>認証トークン有りで呼び出されるとログインボーナスの付与を行う(1日1回のみ)</b><br />
+                    ※ 保有ポイント自体は、別APIにて取得してください"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                country_code:
+                  type: string
+                  example: ja
+      responses:
+        "200":
+          description: "アプリ情報"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  member_terms_url:
+                    type: string
+                    example: "https://avex.com/jp/ja/public/privacy/"
+                  pasch_terms_url:
+                    type: string
+                    example: "https://local-monsta-x.pasch.fan/legal"
+                  privacy_url:
+                    type: string
+                    example: "https://local-monsta-x.pasch.fan/help"
+                  help_url:
+                    type: string
+                    example: "https://local-monsta-x.pasch.fan/help"
+
+  /api/artist/artists:
+    post:
+      summary: "アーティスト一覧取得"
+      description: "アーティスト一覧を取得します。<br />※デフォルトで100件ずつ取得します。"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                artist_type:
+                  type: integer
+                  example: 0
+                country_code:
+                  type: string
+                  example: ja
+                count:
+                  type: integer
+                  example: 30
+                page:
+                  type: integer
+                  example: 1
+      responses:
+        "200":
+          description: "メンバー一覧情報"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  artists:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                          example: 1234
+                        artist_type:
+                          type: integer
+                          example: 1
+                        name:
+                          type: string
+                          example: "メンバー名"
+                        profile_image_url:
+                          type: string
+                          example: https://amazon.s3.chatta.jp/XXX/XXX.png
+                        profile:
+                          type: string
+                          example: 部屋名説明文４５６
+                        follower_count:
+                          type: integer
+                          example: 33333
+                        is_followed:
+                          type: boolean
+                          example: true
+
+  /api/post/list:
+      post:
+        summary: "ポスト・コメント・コメントリプライ情報"
+        description: "ポスト・コメント・コメントリプライ一覧を100件づつ取得<br />ポスト自体が短いので内容含めて全て取得"
+        requestBody:
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data_type:
+                    type: integer
+                    example: 0
+                  post_type:
+                    type: integer
+                    example: 0
+                  order:
+                    type: integer
+                    example: 0
+                  country_code:
+                    type: string
+                    example: ja
+                  count:
+                    type: integer
+                    example: 200
+                  page:
+                    type: integer
+                    example: 1
+                  follow_only:
+                    type: integer
+                    example: 0
+        responses:
+          "200":
+            description: "ポスト一覧情報"
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    posts:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          id:
+                            type: integer
+                            example: 1234
+                          post_type:
+                            type: integer
+                            example: 1
+                          artist_id:
+                            type: integer
+                            example: 1
+                          artist_type:
+                            type: integer
+                            example: 1
+                          title:
+                            type: string
+                            example: タイトル
+                          body:
+                            type: string
+                            example: 本文
+                          thumbnail_url:
+                            type: string
+                            example: https://chatta-dev.s3-ap-northeast-1.amazonaws.com/xxx/yyy/zzz.png
+                          post_movie_url:
+                            type: string
+                            example: https://chatta-dev.s3-ap-northeast-1.amazonaws.com/xxx/yyy/zzz.png
+                          comment_count:
+                            type: integer
+                            example: 3231
+                          like_count:
+                            type: integer
+                            example: 3231
+                          hash_tags:
+                            type: string
+                            example: "#ホゲホゲ #TEST"
+                          created_at:
+                            type: string
+                            example: "2022-01-21T05:50:33.722499Z"
+                          updated_at:
+                            type: string
+                            example: "2022-01-21T05:50:33.722578Z"
+
+  /api/search:
+    post:
+      summary: "ルームや投稿への検索の実施"
+      description: "ルームや投稿への検索の実施"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                word:
+                  type: string
+                  example: "WARPs DIG"
+                country_code:
+                  type: string
+                  example: "ja"
+      responses:
+        "200":
+          description: "ポスト一覧情報"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  posts:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                          example: 1234
+                        post_type:
+                          type: integer
+                          example: 1
+                        artist_id:
+                          type: integer
+                          example: 1
+                        artist_type:
+                          type: integer
+                          example: 1
+                        title:
+                          type: string
+                          example: タイトル
+                        body:
+                          type: string
+                          example: 本文
+                        thumbnail_url:
+                          type: string
+                          example: https://chatta-dev.s3-ap-northeast-1.amazonaws.com/xxx/yyy/zzz.png
+                        post_movie_url:
+                          type: string
+                          example: https://chatta-dev.s3-ap-northeast-1.amazonaws.com/xxx/yyy/zzz.png
+                        comment_count:
+                          type: integer
+                          example: 3231
+                        like_count:
+                          type: integer
+                          example: 3231
+                        hash_tags:
+                          type: string
+                          example: "#ホゲホゲ #TEST"
+                        created_at:
+                          type: string
+                          example: "2022-01-21T05:50:33.722499Z"
+                        updated_at:
+                          type: string
+                          example: "2022-01-21T05:50:33.722578Z"
+                  rooms:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                          example: 1234
+                        name:
+                          type: string
+                          example: "WARPs DIGコミュニティ"
+                        room_image_url:
+                          type: string
+                          example: https://chatta-dev.s3-ap-northeast-1.amazonaws.com/xxx/yyy/zzz.png
+                        comment_count:
+                          type: integer
+                          example: 2000
+                        description:
+                          type: string
+                          example: "モゴモゴもごモゴモゴもごモゴモゴもごモゴモゴもごモゴモゴもご"
+

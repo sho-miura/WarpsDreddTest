@@ -1,0 +1,408 @@
+openapi: 3.0.3
+info:
+  version: "0.0.1"
+  title: "ゲストユーザーの異常系テスト(guest_user_abnormal.yml)"
+servers:
+- url: "https://dev-warps.pasch.fan"
+paths:
+  /api/auth/login:
+    post:
+      summary: "ログインAPI認証なしでログイン"
+      description: "メールアドレス、パスワードから認証トークンを返却します"
+      requestBody:
+        description: "メールアドレス、パスワードを入力します"
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  example: example@gmail.com
+                password:
+                  type: string
+                  example: dEddka32dfS
+      responses:
+        "422":
+          description: "ユーザー情報"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: These credentials do not match our records.
+
+
+  /api/home/init:
+    post:
+      summary: "規約・プライバシーポリシーに値無しで送信"
+      description: "規約・プライバシーポリシーのURLを返却。言語コード毎に返すURLが違う。<br />
+                    <b>認証トークン有りで呼び出されるとログインボーナスの付与を行う(1日1回のみ)</b><br />
+                    ※ 保有ポイント自体は、別APIにて取得してください"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                country_code:
+                  type: string
+                  example: ja
+      responses:
+        "200":
+          description: "アプリ情報"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  member_terms_url:
+                    type: string
+                    example: "https://avex.com/jp/ja/public/privacy/"
+                  pasch_terms_url:
+                    type: string
+                    example: "https://local-monsta-x.pasch.fan/legal"
+                  privacy_url:
+                    type: string
+                    example: "https://local-monsta-x.pasch.fan/help"
+                  help_url:
+                    type: string
+                    example: "https://local-monsta-x.pasch.fan/help"
+
+  /api/account/me:
+    post:
+      summary: "マイアカウント情報取得に認証情報なしでリクエスト"
+      description: "自身のWARPsユーザー情報、PASCHアカウント情報、会員証情報、ファンクラブプロフィール情報の取得"
+      responses:
+        "403":
+          description: "ユーザー情報"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  detail:
+                    type: string
+                    example: "認証情報が正しくありません"
+
+  /api/account/other:
+    post:
+      summary: "アカウント情報取得:存在しないIDをリクエスト"
+      description: "UIDベースでのWARPsアカウント情報の取得。基本、他の人のアカウントを調べる用途。"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: integer
+                  example: 2
+      responses:
+        "403":
+          description: "ユーザー情報"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  detail:
+                    type: string
+                    example: "認証情報が正しくありません"
+
+
+  /api/artist/follow/new:
+    post:
+      summary: "アーティストフォロー"
+      description: "アーティストフォローを実施します。"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                artist_type:
+                  type: integer
+                  example: 0
+                artist_id:
+                  type: integer
+                  example: 4
+      responses:
+        "403":
+          description: "ユーザー情報"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  detail:
+                    type: string
+                    example: "認証情報が正しくありません"
+
+
+  /api/artist/follow/delete:
+    post:
+      summary: "アーティストフォロー解除"
+      description: "アーティストフォロー解除を実施します。"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                artist_type:
+                  type: integer
+                  example: 0
+                artist_id:
+                  type: integer
+                  example: 4
+      responses:
+        "403":
+          description: "ユーザー情報"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  detail:
+                    type: string
+                    example: "認証情報が正しくありません"
+
+
+
+  /api/community/comment/new:
+    post:
+      summary: "ルームへのコメントの投稿"
+      description: "ルームへのコメントの投稿"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: integer
+                  example: 2
+                comment:
+                  type: string
+                  example: "ルームに対するコメント投稿"
+                country_code:
+                  type: string
+                  example: ja
+      responses:
+        "403":
+          description: "ユーザー情報"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  detail:
+                    type: string
+                    example: "認証情報が正しくありません"
+
+
+  /api/community/comment/delete:
+    post:
+      summary: "投稿情報の削除"
+      description: "ルームへのコメントの削除<br />※自身のコメントしか削除できません"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: integer
+                  example: 2
+      responses:
+        "403":
+          description: "ユーザー情報"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  detail:
+                    type: string
+                    example: "認証情報が正しくありません"
+
+
+
+  /api/community/favorite/new:
+    post:
+      summary: "Roomのお気に入り"
+      description: "Roomのお気に入り"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: integer
+                  example: 2
+      responses:
+        "403":
+          description: "ユーザー情報"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  detail:
+                    type: string
+                    example: "認証情報が正しくありません"
+
+
+  /api/community/favorite/delete:
+    post:
+      summary: "Roomのお気に入り解除"
+      description: "Roomのお気に入り解除"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: integer
+                  example: 2
+      responses:
+        "403":
+          description: "ユーザー情報"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  detail:
+                    type: string
+                    example: "認証情報が正しくありません"
+
+
+
+  /api/post/like/new:
+    post:
+      summary: "ポスト・コメント・コメントリプライでのいいね"
+      description: "ポスト・コメント・コメントリプライでのいいね"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: integer
+                  example: 4
+                data_type:
+                  type: integer
+                  example: 0
+      responses:
+        "403":
+          description: "ユーザー情報"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  detail:
+                    type: string
+                    example: "認証情報が正しくありません"
+
+
+  /api/post/like/delete:
+    post:
+      summary: "ポスト・コメント・コメントリプライでのいいね解除"
+      description: "ポスト・コメント・コメントリプライでのいいね解除"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: integer
+                  example: 4
+                data_type:
+                  type: integer
+                  example: 0
+      responses:
+        "403":
+          description: "ユーザー情報"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  detail:
+                    type: string
+                    example: "認証情報が正しくありません"
+
+
+
+
+  /api/post/comment/new:
+    post:
+      summary: "ポスト・コメントでのコメント・コメントリプライ作成"
+      description: "ポスト・コメントでのコメント・コメントリプライ作成<br />※NGワードでの登録失敗は「422」のエラーコードが返る。"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: integer
+                  example: 4
+                data_type:
+                  type: integer
+                  example: 0
+                comment:
+                  type: string
+                  example: "this is post comment"
+                country_code:
+                  type: string
+                  example: ja
+      responses:
+        "403":
+          description: "ユーザー情報"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  detail:
+                    type: string
+                    example: "認証情報が正しくありません"
+
+
+  /api/post/comment/delete:
+    post:
+      summary: "ポスト・コメントでのコメント・コメントリプライ削除"
+      description: "ポスト・コメントでのコメント・コメントリプライ削除"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: integer
+                  example: 4
+                data_type:
+                  type: integer
+                  example: 1
+      responses:
+        "403":
+          description: "ユーザー情報"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  detail:
+                    type: string
+                    example: "認証情報が正しくありません"

@@ -1,0 +1,573 @@
+openapi: 3.0.3
+info:
+  description: "WARPs APIに関するリファレンスです。検討段階でのものとなります。"
+  version: "0.0.1"
+  title: "ログインユーザーの異常系テスト(login_user_abnormal.yml)"
+servers:
+- url: "https://dev-warps.pasch.fan"
+paths:
+  /api/auth/login:
+    post:
+      summary: "ログインAPI(メールアドレス)"
+      description: "メールアドレス、パスワードから認証トークンを返却します"
+      requestBody:
+        description: "メールアドレス、パスワードを入力します"
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  example: example@gmail.com
+                password:
+                  type: string
+                  example: password
+      responses:
+        "200":
+          description: "ユーザー情報"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+                    example: OEG9DiFYBuPKq2gPIMhFabajEesbXtImspIYTqyc09iCRVW1zcs0KkAzWswE
+
+
+  /api/account/other:
+    post:
+      summary: "アカウント情報取得:存在しないIDをリクエスト"
+      description: "UIDベースでのWARPsアカウント情報の取得。基本、他の人のアカウントを調べる用途。"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: integer
+                  example: 99999999999
+      responses:
+        "404":
+          description: "ユーザー情報"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Bad Request.
+
+  /api/artist/follow/new:
+    post:
+      summary: "アーティストフォロー:存在しないIDを入力"
+      description: "アーティストフォローを実施します。"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                artist_type:
+                  type: integer
+                  example: 0
+                artist_id:
+                  type: integer
+                  example: 0
+      responses:
+        "404":
+          description: "アーティストが見つからない"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Not Found.
+
+
+
+  /api/artist/follow/delete:
+    post:
+      summary: "アーティストフォロー解除"
+      description: "アーティストフォロー解除を実施します。"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                artist_type:
+                  type: integer
+                  example: 0
+                artist_id:
+                  type: integer
+                  example: 0
+      responses:
+        "404":
+          description: "アーティストが見つからない"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Not Found.
+        "400":
+          description: "値が間違っている"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Bad Request.
+
+
+  /api/community/rooms:
+    post:
+      summary: "部屋一覧取得:値を空で入力:デフォルトjaのルームが返される"
+      description: "コミュニティ機能で対象FCで表示可能なルーム一覧を取得します。<br />※デフォルトで100件ずつ取得します。"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        "200":
+          description: "部屋一覧情報"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  rooms:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                          example: 1234
+                        name:
+                          type: string
+                          example: 部屋名１２３
+                        description:
+                          type: string
+                          example: 部屋名説明文４５６
+                        room_image_url:
+                          type: string
+                          example: https://amazon.s3.chatta.jp/XXX/XXX.png
+                        comment_count:
+                          type: integer
+                          example: 1000
+                        public_range:
+                          type: integer
+                          example: 1
+                        created_at:
+                          type: string
+                          example: "2021-01-01T00:00:00.000Z"
+                        updated_at:
+                          type: string
+                          example: "2021-01-01T00:00:00.000Z"
+
+
+  /api/community/comments:
+    post:
+      summary: "ルームのコメント情報取得"
+      description: "ルームのコメント情報一覧の取得"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: integer
+                  example: 99999999
+                count:
+                  type: integer
+                  example: 100
+                page:
+                  type: integer
+                  example: 1
+      responses:
+        "404":
+          description: "ルームが見つからない"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Room not Found.
+
+  /api/community/comment/new:
+    post:
+      summary: "ルームへのコメントの投稿"
+      description: "ルームへのコメントの投稿"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: integer
+                  example: 999999999
+                comment:
+                  type: string
+                  example: "ルームに対するコメント投稿"
+                country_code:
+                  type: string
+                  example: ja
+      responses:
+        "400":
+          description: "値が間違っている"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Bad Request.
+        "404":
+          description: "ルームが見つからない"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Room not Found.
+
+
+  /api/community/comment/delete:
+    post:
+      summary: "投稿情報の削除"
+      description: "ルームへのコメントの削除<br />※自身のコメントしか削除できません"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: integer
+                  example: 99999999
+      responses:
+        "422":
+          description: "IDが間違っている"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unable delete RoomComment.
+
+        "400":
+          description: "値が間違っている"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Bad Request.
+
+
+
+  /api/community/favorite/new:
+    post:
+      summary: "Roomのお気に入り"
+      description: "Roomのお気に入り"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: integer
+                  example: 9999999
+      responses:
+        "404":
+          description: "ルームIDが存在しない"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Room not Found.
+        "400":
+          description: "異常パラメータの入力"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Bad Request.
+
+
+  /api/community/favorite/delete:
+    post:
+      summary: "Roomのお気に入り解除"
+      description: "Roomのお気に入り解除"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: integer
+                  example: 9999999
+      responses:
+        "404":
+          description: "ルームIDが存在しない"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Room not Found.
+        "400":
+          description: "異常パラメータの入力"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Bad Request.
+
+
+
+  /api/post/list:
+    post:
+      summary: "ポスト・コメント・コメントリプライ情報:"
+      description: "ポスト・コメント・コメントリプライ一覧を100件づつ取得<br />ポスト自体が短いので内容含めて全て取得"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        "200":
+          description: "ポスト一覧情報"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  posts:
+                    type: array
+
+
+
+  /api/post/like/new:
+    post:
+      summary: "ポスト・コメント・コメントリプライでのいいね"
+      description: "ポスト・コメント・コメントリプライでのいいね"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: integer
+                  example: 9999999
+                data_type:
+                  type: integer
+                  example: 0
+      responses:
+        "404":
+          description: "投稿IDが存在しない"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Post not Found.
+        "400":
+          description: "異常パラメータの入力"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Bad Request.
+
+
+  /api/post/like/delete:
+    post:
+      summary: "ポスト・コメント・コメントリプライでのいいね解除"
+      description: "ポスト・コメント・コメントリプライでのいいね解除"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: integer
+                  example: 999999999
+                data_type:
+                  type: integer
+                  example: 0
+      responses:
+        "404":
+          description: "投稿IDが存在しない"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Post not Found.
+        "400":
+          description: "異常パラメータの入力"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Bad Request.
+
+
+
+
+  /api/post/comment/new:
+    post:
+      summary: "ポスト・コメントでのコメント・コメントリプライ作成"
+      description: "ポスト・コメントでのコメント・コメントリプライ作成<br />※NGワードでの登録失敗は「422」のエラーコードが返る。"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: integer
+                  example: 9999999999
+                data_type:
+                  type: integer
+                  example: 0
+                comment:
+                  type: string
+                  example: "this is post comment"
+                country_code:
+                  type: string
+                  example: ja
+      responses:
+        "404":
+          description: "投稿IDが存在しない"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Post not Found.
+        "400":
+          description: "異常パラメータの入力"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Bad Request.
+
+
+  /api/post/comment/delete:
+    post:
+      summary: "ポスト・コメントでのコメント・コメントリプライ削除"
+      description: "ポスト・コメントでのコメント・コメントリプライ削除"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: integer
+                  example: 9999999
+                data_type:
+                  type: integer
+                  example: 1
+      responses:
+        "422":
+          description: "投稿IDが存在しない"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unable delete PostComment.
+        "400":
+          description: "異常パラメータの入力"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Bad Request.
+
+
+
+
+  /api/search:
+    post:
+      summary: "ルームや投稿への検索の実施"
+      description: "ルームや投稿への検索の実施"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        "400":
+          description: "{}のみで入力した場合"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Bad Request.
+
